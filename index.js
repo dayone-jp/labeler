@@ -9,7 +9,8 @@ try {
   const set = core.getInput("set");
   const label = core.getInput("label");
 
-  console.log(`set: ${set}`, `label: "${label}"`);
+  console.log(`set: ${set}`);
+  console.log(`label: "${label}"`);
 
   const prNumber = github.context.payload.pull_request.number;
 
