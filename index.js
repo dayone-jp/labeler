@@ -8,7 +8,16 @@ try {
 
   const prNumber = github.context.payload.pull_request.number;
 
-  await (set === "true" ? addLabel() : removeLabel());
+  const hasLabel = async () => {
+    const labels = await oktokit.request(
+      "GET /repos/{owner}/{repo}/issues/{issue_number}/labels",
+      {
+        ...github.context.repo,
+        issue_number: prNumber,
+      }
+    );
+    return labels.data.some((l) => l.name === label);
+  };
 
   const removeLabel = async () => {
     if (await hasLabel()) {
@@ -36,16 +45,7 @@ try {
     }
   };
 
-  const hasLabel = async () => {
-    const labels = await oktokit.request(
-      "GET /repos/{owner}/{repo}/issues/{issue_number}/labels",
-      {
-        ...github.context.repo,
-        issue_number: prNumber,
-      }
-    );
-    return labels.data.some((l) => l.name === label);
-  };
+  await (set === "true" ? addLabel() : removeLabel());
 } catch (error) {
   core.setFailed(error.message);
 }
