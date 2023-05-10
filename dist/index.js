@@ -9710,7 +9710,7 @@ try {
         {
           ..._actions_github__WEBPACK_IMPORTED_MODULE_1__.context.repo,
           issue_number: prNumber,
-          label: labelName,
+          label,
         }
       );
     }
@@ -9723,7 +9723,7 @@ try {
         {
           ..._actions_github__WEBPACK_IMPORTED_MODULE_1__.context.repo,
           issue_number: prNumber,
-          labels: [labelName],
+          labels: [label],
         }
       );
     }

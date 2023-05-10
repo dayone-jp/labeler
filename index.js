@@ -26,7 +26,7 @@ try {
         {
           ...github.context.repo,
           issue_number: prNumber,
-          label: labelName,
+          label,
         }
       );
     }
@@ -39,7 +39,7 @@ try {
         {
           ...github.context.repo,
           issue_number: prNumber,
-          labels: [labelName],
+          labels: [label],
         }
       );
     }
