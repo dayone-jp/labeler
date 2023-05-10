@@ -9692,7 +9692,16 @@ try {
 
   const prNumber = _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.payload.pull_request.number;
 
-  await (set === "true" ? addLabel() : removeLabel());
+  const hasLabel = async () => {
+    const labels = await oktokit.request(
+      "GET /repos/{owner}/{repo}/issues/{issue_number}/labels",
+      {
+        ..._actions_github__WEBPACK_IMPORTED_MODULE_1__.context.repo,
+        issue_number: prNumber,
+      }
+    );
+    return labels.data.some((l) => l.name === label);
+  };
 
   const removeLabel = async () => {
     if (await hasLabel()) {
@@ -9720,16 +9729,7 @@ try {
     }
   };
 
-  const hasLabel = async () => {
-    const labels = await oktokit.request(
-      "GET /repos/{owner}/{repo}/issues/{issue_number}/labels",
-      {
-        ..._actions_github__WEBPACK_IMPORTED_MODULE_1__.context.repo,
-        issue_number: prNumber,
-      }
-    );
-    return labels.data.some((l) => l.name === label);
-  };
+  await (set === "true" ? addLabel() : removeLabel());
 } catch (error) {
   _actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed(error.message);
 }
