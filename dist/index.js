@@ -9685,10 +9685,15 @@ __nccwpck_require__.a(__webpack_module__, async (__webpack_handle_async_dependen
 
 
 
+const isAdd = (set) => set === "true";
+const isRemove = (set) => !isAdd(set);
+
 try {
   const oktokit = _actions_github__WEBPACK_IMPORTED_MODULE_1__.getOctokit(process.env.GITHUB_TOKEN);
   const set = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput("set");
   const label = _actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput("label");
+
+  console.log(`set: ${set}`, `label: "${label}"`);
 
   const prNumber = _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.payload.pull_request.number;
 
@@ -9703,14 +9708,18 @@ try {
     const hasLabel = labels.data.some((l) => l.name === label);
     console.log(
       hasLabel
-        ? `PR #${prNumber} has label ${label}; proceeding...`
-        : `PR #${prNumber} does not have label ${label}; skip...`
+        ? `PR #${prNumber} has label ${label}; ${
+            isRemove(set) ? "proceeding..." : "skip..."
+          }`
+        : `PR #${prNumber} does not have label ${label}; ${
+            isAdd(set) ? "proceeding..." : "skip..."
+          }`
     );
     return labels.data.some((l) => l.name === label);
   };
 
   const removeLabel = async () => {
-    console.log(`Removing label ${label} from PR #${prNumber}`);
+    console.log(`Removing label "${label}" from PR #${prNumber}`);
     if (await hasLabel()) {
       await oktokit.request(
         "DELETE /repos/{owner}/{repo}/issues/{issue_number}/labels/{label}",
@@ -9724,7 +9733,7 @@ try {
   };
 
   const addLabel = async () => {
-    console.log(`Adding label ${label} to PR #${prNumber}`);
+    console.log(`Adding label "${label}" to PR #${prNumber}`);
     if (!(await hasLabel())) {
       await oktokit.request(
         "POST /repos/{owner}/{repo}/issues/{issue_number}/labels",
