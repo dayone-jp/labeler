@@ -1,0 +1,13 @@
+name: 'Labeler'
+description: 'Adds label to the PR depending on the condition passes'
+inputs:
+  set:
+    description: 'If true sets the label, if false removes the label'
+    required: true
+    default: 'true'
+  label:
+    description: 'The label to be set'
+    required: true
+runs:
+  using: 'node16'
+  main: 'dist/index.js'
