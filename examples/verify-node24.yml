@@ -1,0 +1,37 @@
+# This is a sample workflow to check the action
+# This file does not run while it stays here
+# Copy it into .github/workflows/ when you want to check
+# Open a PR and it runs the action on Node 24
+# It adds a label with set true then removes it with set false
+# Both steps must pass to be OK
+# This action reads the PR context so it runs on pull_request
+# We ran it on ubuntu-24.04 with Node 24 and it passed
+name: Verify Node 24
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  labeler-verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Add label
+        uses: dayone-jp/labeler@main
+        with:
+          set: 'true'
+          label: 'node24-selftest'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Remove label
+        uses: dayone-jp/labeler@main
+        with:
+          set: 'false'
+          label: 'node24-selftest'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
