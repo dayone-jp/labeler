@@ -9,5 +9,5 @@ inputs:
     description: 'The label to be set'
     required: true
 runs:
-  using: 'node16'
+  using: 'node24'
   main: 'dist/index.js'
